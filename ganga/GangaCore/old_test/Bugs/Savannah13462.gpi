@@ -1,6 +1,0 @@
-from GangaTest.Framework.utils import failureException
-
-j = Job(outputfiles = [ LocalFile('stdin'), LocalFile('stdout')])
-
-j.backend = LCG()
-assert(j.submit())
