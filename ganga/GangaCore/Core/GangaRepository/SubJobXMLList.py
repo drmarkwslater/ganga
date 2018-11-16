@@ -28,7 +28,7 @@ class SJXLIterator(object):
         self._myCount = 0
 
     ## NB becomes __next__ in Python 3.x don't know if Python 2.7 has a wrapper here
-    def next(self):
+    def __next__(self):
         if self._myCount < len(self._mySubJobs):
             returnable = self._mySubJobs[self._myCount]
             self._myCount += 1

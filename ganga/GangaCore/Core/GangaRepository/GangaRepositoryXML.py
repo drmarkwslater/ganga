@@ -322,7 +322,7 @@ class GangaRepositoryLocal(GangaRepository):
                     raise IOError('Failed to Parse information in Index file: %s. Err: %s' % (fn, err))
             this_cache = obj._index_cache
             this_data = this_cache if this_cache else {}
-            for k, v in cache.iteritems():
+            for k, v in cache.items():
                 this_data[k] = v
             #obj.setNodeData(this_data)
             obj._index_cache = cache
@@ -430,13 +430,13 @@ class GangaRepositoryLocal(GangaRepository):
         """
         clear the master cache(s) which have been stored in memory
         """
-        for k, v in self._cache_load_timestamp.iteritems():
+        for k, v in self._cache_load_timestamp.items():
             self._cache_load_timestamp.pop(k)
-        for k, v in self._cached_cat.iteritems():
+        for k, v in self._cached_cat.items():
             self._cached_cat.pop(k)
-        for k, v in self._cached_cls.iteritems():
+        for k, v in self._cached_cls.items():
             self._cached_cls.pop(k)
-        for k, v in self._cached_obj.iteritems():
+        for k, v in self._cached_obj.items():
             self._cached_obj.pop(k)
 
     def _write_master_cache(self, shutdown=False):
@@ -452,8 +452,7 @@ class GangaRepositoryLocal(GangaRepository):
                 if abs(self._master_index_timestamp - os.stat(_master_idx).st_ctime) < 300:
                     return
 
-            items_to_save = self.objects.iteritems()
-            for k, v in items_to_save:
+            for k, v in self.objects.items():
                 if k in self.incomplete_objects:
                     continue
                 try:
@@ -476,8 +475,7 @@ class GangaRepositoryLocal(GangaRepository):
                     logger.debug("Failed to update index: %s on startup/shutdown" % k)
                     logger.debug("Reason: %s" % err)
 
-            iterables = self._cache_load_timestamp.iteritems()
-            for k, v in iterables:
+            for k, v in self._cache_load_timestamp.items():
                 if k in self.incomplete_objects:
                     continue
                 cached_list = []
@@ -824,10 +822,10 @@ class GangaRepositoryLocal(GangaRepository):
                         self.objects[this_id]._setDirty()
                 # self.unlock([this_id])
 
-                old_idx_subset = all((k in new_idx_cache and new_idx_cache[k] == v) for k, v in obj._index_cache.iteritems())
+                old_idx_subset = all((k in new_idx_cache and new_idx_cache[k] == v) for k, v in obj._index_cache.items())
                 if not old_idx_subset:
                     # Old index cache isn't subset of new index cache
-                    new_idx_subset = all((k in obj._index_cache and obj._index_cache[k] == v) for k, v in new_idx_cache.iteritems())
+                    new_idx_subset = all((k in obj._index_cache and obj._index_cache[k] == v) for k, v in new_idx_cache.items())
                 else:
                     # Old index cache is subset of new index cache so no need to check
                     new_idx_subset = True

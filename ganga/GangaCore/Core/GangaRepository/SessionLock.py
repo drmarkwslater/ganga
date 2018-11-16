@@ -4,7 +4,7 @@
 # to run locking tests (run several instances in the same directory, from
 # different machines)
 
-from __future__ import print_function
+
 
 import functools
 import threading
@@ -20,7 +20,7 @@ import getpass
 from pipes import quote
 
 try:
-    import cPickle as pickle
+    import pickle as pickle
 except ImportError:
     import pickle
 
@@ -40,7 +40,7 @@ session_lock_last = 0
 session_expiration_timeout = 0
 try:
     session_expiration_timeout = getConfig('Configuration')['DiskIOTimeout']
-except ConfigError, err:
+except ConfigError as err:
     session_expiratrion_timeout = 30
 
 session_lock_refresher = None
@@ -417,7 +417,7 @@ class SessionLockManager(object):
                     os.close(fd)
         try:
             self.count = max(self.count, self.cnt_read())
-        except ValueError, err:
+        except ValueError as err:
             logger.debug("Startup ValueError Exception: %s" % err)
             logger.error("Corrupt count file '%s'! Trying to recover..." % (self.cntfn))
         except OSError as err:
@@ -696,7 +696,7 @@ class SessionLockManager(object):
         # someone used force_ids (for example old repository imports)
         if self.locked and max(self.locked) >= newcount:
             newcount = max(self.locked) + 1
-        ids = range(newcount, newcount + n)
+        ids = list(range(newcount, newcount + n))
         if not GANGA_SWAN_INTEGRATION:
             # If sharing sessions don't update id to locked.
             self.locked.update(ids)
@@ -868,6 +868,6 @@ class SessionLockManager(object):
         si = session.split(".")
         try:
             return "%s (pid %s) since %s" % (".".join(si[:-3]), si[-2], ".".join(si[-5:-3]))
-        except Exception, err:
+        except Exception as err:
             logger.debug( "Session Info Exception: %s" % err)
             return session
