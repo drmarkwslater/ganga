@@ -152,7 +152,7 @@ class GangaThreadPool(object):
                         msg = 'Job status update or output download still in progress (shutdown not completed ' \
                               'after %d seconds). %d background thread(s) still running: %s. Do you want to force ' \
                               'the exit (y/[n])? ' % (total_time, len(critical_thread_ids), critical_thread_ids)
-                        resp = raw_input(msg)
+                        resp = input(msg)
                         t_last = time.time()
                         if resp.lower() == 'y':
                             break
