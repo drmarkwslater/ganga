@@ -1,4 +1,4 @@
-import Queue
+import queue
 import threading
 import time
 import copy
@@ -31,7 +31,7 @@ log = getLogger()
 
 config = getConfig("PollThread")
 THREAD_POOL_SIZE = config['update_thread_pool_size']
-Qin = Queue.Queue()
+Qin = queue.Queue()
 ThreadPool = []
 
 heartbeat_times = None
@@ -121,7 +121,7 @@ class MonitoringWorkerThread(GangaThread):
                 try:
                     action = Qin.get(block=True, timeout=0.5)
                     break
-                except Queue.Empty:
+                except queue.Empty:
                     continue
 
             if self.should_stop():
@@ -245,7 +245,7 @@ def _purge_actions_queue():
             # fail to terminate
             if isType(action, JobAction) and action.function == 'stop':
                 Qin.put(action)
-        except Queue.Empty:
+        except queue.Empty:
             break
 
 if config['autostart_monThreads'] is True:
@@ -557,9 +557,9 @@ class JobRegistry_Monitor(GangaThread):
         """
         Main monitoring loop
         """
-        import thread
+        import _thread
         from GangaCore.Core.MonitoringComponent import monitoring_thread_id
-        monitoring_thread_id = thread.get_ident()
+        monitoring_thread_id = _thread.get_ident()
         del thread
 
         log.debug("Starting run method")
@@ -1055,7 +1055,7 @@ class JobRegistry_Monitor(GangaThread):
                 log.debug("Reg LockError%s" % str(err))
 
         summary = '{'
-        for backend, these_jobs in active_backends.iteritems():
+        for backend, these_jobs in active_backends.items():
             summary += '"' + str(backend) + '" : ['
             for this_job in these_jobs:
                 summary += str(stripProxy(this_job).id) + ', '#getFQID('.')) + ', '
@@ -1083,7 +1083,7 @@ class JobRegistry_Monitor(GangaThread):
             #FIXME We've lost IList and the above method for adding a job which is in a submitted state looks like one that didn't work
             # Come back and fix this once 6.1.3 is out. We can drop features for functionalist here as the lazy loading is fixed in this release
             # rcurrie
-            alljobList_fromset = list(filter(lambda x: x.status in ['submitting', 'submitted', 'running'], jobListSet))
+            alljobList_fromset = [x for x in jobListSet if x.status in ['submitting', 'submitted', 'running']]
             masterJobList_fromset = list()
 
             # print masterJobList_fromset
@@ -1192,7 +1192,7 @@ class JobRegistry_Monitor(GangaThread):
             activeBackends = activeBackendsFunc(jobSlice=jobSlice)
 
         summary = '{'
-        for this_backend, these_jobs in activeBackends.iteritems():
+        for this_backend, these_jobs in activeBackends.items():
             summary += '"' + this_backend + '" : ['
             for this_job in these_jobs:
                 summary += str(stripProxy(this_job).getFQID('.')) + ', '
@@ -1349,8 +1349,8 @@ def getStackTrace():
         #log.info("Queue", str(Qin.queue))
         log.debug("Trace: %s" % str(status))
         return status
-    except Exception, err:
-        print("Err: %s" % str(err))
+    except Exception as err:
+        print(("Err: %s" % str(err)))
     finally:
         pass
 
