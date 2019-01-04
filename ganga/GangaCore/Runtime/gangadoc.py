@@ -8,7 +8,7 @@
 Remove hardcoded limits on the help text.
 This module makes changes to the content of the pydoc module.
 """
-from __future__ import absolute_import
+
 
 import pydoc
 
